@@ -10,6 +10,7 @@ export const handleCreateTask = async (
   res: Response
 ): Promise<any> => {
   try {
+    console.log("hi there", req.body)
     const user = req.user;
     const databases = req.databases;
     if (!databases)
@@ -77,7 +78,7 @@ export const getTask = async (req: CustomRequest, res: Response): Promise<any> =
     ];
     if (projectId) {
       console.log("projectId:", projectId);
-      query.push(Query.equal("prjectId", projectId));
+      query.push(Query.equal("projectId", projectId));
     }
     if (status) {
       console.log("status:", status);

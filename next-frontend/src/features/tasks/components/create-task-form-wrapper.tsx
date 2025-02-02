@@ -20,13 +20,14 @@ const CreateTaskFormWrapper = ({onCancel}: CreateTaskFormWrapperProps) => {
   const projectOptions = projects?.documents.map((project: any) => {
     return {
         id: project.$id,
-        name: project.name
+        name: project.name,
+        imageUrl: project.imageUrl
     }
   })
   const memberOptions = members?.documents.map((member: any) => {
     return {
         id: member.$id,
-        name: member.name
+        name: member.name,
     }
   })
   const isLoading = isProjectsLoading || isMembersLoading;

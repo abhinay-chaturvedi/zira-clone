@@ -7,13 +7,18 @@ export const useCreateTask = () => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: async (payload: createTaskPayload) => {
+      console.log("-----------", payload)
       const response = await fetch(NEXT_PUBLIC_API_URL + "/tasks", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify(payload),
         credentials: "include"
       });
       if (!response.ok) {
-        toast.error("Failed to create task.");
+        // toast.error("Failed to create task.");
+        throw new Error("Failed to create task")
       }
 
       return await response.json();
