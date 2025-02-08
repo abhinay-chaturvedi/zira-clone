@@ -276,7 +276,7 @@ export const getTaskById = async (
       config.APPWRITE_MEMBERS_ID,
       task.assigneeId
     );
-    console.log("till 279", member.$id, users);
+    // console.log("till 279", member.$id, users);
     // const user = await users.get(member.$id);
     const user = await users.get(member.userId);
     const assignee = {
@@ -286,7 +286,54 @@ export const getTaskById = async (
     };
     return res.status(200).json({ data: { ...task, project, assignee } });
   } catch (err: any) {
-    console.log(err.message)
+    console.log(err.message);
+    return res.status(500).json({ message: err.message });
+  }
+};
+export const handleBulkUpdate = async (
+  req: CustomRequest,
+  res: Response
+): Promise<any> => {
+  try {
+    const databases = req.databases;
+    const user = req.user;
+    const tasks = <{ $id: string; status: string; position: number }[]>req.body;
+    const tasksToUpdate = await databases?.listDocuments(
+      config.APPWRITE_DATABASE_ID,
+      config.APPWRITE_TASKS_ID,
+      [
+        Query.contains(
+          "$id",
+          tasks.map((task) => task.$id)
+        ),
+      ]
+    );
+    const workspaceIds = new Set(
+      tasksToUpdate?.documents.map((task) => task.workspaceId)
+    );
+    if (workspaceIds.size != 1) {
+      return res
+        .status(400)
+        .json({ message: "All tasks must belong to the same workspace" });
+    }
+    const workspaceId = workspaceIds.values().next().value;
+    const member = await getMember({
+      databases,
+      workspaceId,
+      userId: user?.$id,
+    });
+    if (!member) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const updatedTasks = await Promise.all(tasks.map(async (task) => {
+      const { $id, status, position} = task;
+      return await databases?.updateDocument(config.APPWRITE_DATABASE_ID, config.APPWRITE_TASKS_ID, $id, {
+        status,
+        position
+      })
+    }))
+    return res.status(200).json({ data: updatedTasks})
+  } catch (err: any) {
     return res.status(500).json({ message: err.message });
   }
 };

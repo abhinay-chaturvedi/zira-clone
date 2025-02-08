@@ -19,6 +19,7 @@ export const sessionMiddleware = async (
   next: NextFunction
 ): Promise<any> => {
   try {
+    console.log("session middleware", req.url);
     const session = req.cookies[`${config.AUTH_COOKIE}`];
     if (!session) {
       return res.status(401).json({ message: "unauthorized" });
