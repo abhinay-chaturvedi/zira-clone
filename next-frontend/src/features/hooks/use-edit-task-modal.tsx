@@ -2,7 +2,7 @@ import { parseAsString, useQueryState } from "nuqs";
 
 const useEditTaskModal = () => {
   const [taskId, setTaskId] = useQueryState(
-    "create-task",
+    "edit-task",
     parseAsString
   );
   const open = (id: string) => setTaskId(id);

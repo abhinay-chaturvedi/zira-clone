@@ -276,7 +276,9 @@ export const getTaskById = async (
       config.APPWRITE_MEMBERS_ID,
       task.assigneeId
     );
-    const user = await users.get(member.$id);
+    console.log("till 279", member.$id, users);
+    // const user = await users.get(member.$id);
+    const user = await users.get(member.userId);
     const assignee = {
       ...member,
       name: user.name,
@@ -284,6 +286,7 @@ export const getTaskById = async (
     };
     return res.status(200).json({ data: { ...task, project, assignee } });
   } catch (err: any) {
+    console.log(err.message)
     return res.status(500).json({ message: err.message });
   }
 };

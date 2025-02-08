@@ -5,8 +5,8 @@ import { useGetProjects } from "@/features/projects/api/use-get-projects";
 import { Loader } from "lucide-react";
 import { useParams } from "next/navigation";
 import React from "react";
-import CreateTaskForm from "./create-task-form";
 import { useGetTask } from "../api/use-get-task";
+import EditTaskForm from "./edit-task-form";
 interface EditTaskFormWrapperProps {
   onCancel: () => void;
   id: string;
@@ -49,10 +49,11 @@ const EditTaskFormWrapper = ({ onCancel, id }: EditTaskFormWrapperProps) => {
     return null;
   }
   return (
-    <CreateTaskForm
+    <EditTaskForm
       onCancel={onCancel}
       projectOptions={projectOptions}
       memberOptions={memberOptions}
+      initialValues={initialValues}
     />
   );
 };

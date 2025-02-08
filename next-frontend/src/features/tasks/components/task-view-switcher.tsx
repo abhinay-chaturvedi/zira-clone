@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import useCreateTaskModal from "@/features/hooks/use-create-task-modal";
 import { Loader, PlusIcon } from "lucide-react";
-import React from "react";
+import React, { useCallback } from "react";
 import { useGetTasks } from "../api/use-get-tasks";
 import { useParams } from "next/navigation";
 import { useQueryState } from "nuqs";
@@ -12,21 +12,27 @@ import DataFilters from "./data-filters";
 import useTaskFilters from "@/features/hooks/use-task-filters";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
+import DataKanban from "./data-kanban";
+import { TaskStatus } from "../types";
 
 const TaskViewSwitcher = () => {
   const { workspaceId } = useParams<{ workspaceId: string }>();
-  const [{ status, assigneeId, projectId, dueDate }] =
-    useTaskFilters();
+  const [{ status, assigneeId, projectId, dueDate }] = useTaskFilters();
   const { data: tasks, isPending: isTasksLaoding } = useGetTasks({
     workspaceId,
     status,
     assigneeId,
     projectId,
-    dueDate
+    dueDate,
   });
   const { open } = useCreateTaskModal();
   const [view, setView] = useQueryState("task-view", { defaultValue: "table" });
   console.log("TaskViewSwitcher");
+  const onKanbanChange = useCallback((
+    tasks: {$id: string; status: TaskStatus; position: number}
+  ) => {
+    console.log(tasks);
+  }, []);
   return (
     <Tabs
       defaultValue={view}
@@ -52,18 +58,20 @@ const TaskViewSwitcher = () => {
           </Button>
         </div>
         <DottedSeperator className="my-4" />
-         <DataFilters/>
+        <DataFilters />
         <DottedSeperator className="my-4" />
         {isTasksLaoding ? (
           <div className="w-full border rounded-lg h-[200px] flex flex-col justify-center items-center">
-            <Loader className="size-5 animate-spin text-muted-foreground"/>
+            <Loader className="size-5 animate-spin text-muted-foreground" />
           </div>
         ) : (
           <>
             <TabsContent value="table">
-              <DataTable columns={columns} data={tasks?.documents ?? []}/>
+              <DataTable columns={columns} data={tasks?.documents ?? []} />
             </TabsContent>
-            <TabsContent value="kanban">{JSON.stringify(tasks)}</TabsContent>
+            <TabsContent value="kanban">
+              <DataKanban onChange={onKanbanChange} data={tasks?.documents ?? []} />
+            </TabsContent>
             <TabsContent value="calendar">{JSON.stringify(tasks)}</TabsContent>
           </>
         )}

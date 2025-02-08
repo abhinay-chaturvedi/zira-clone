@@ -1,3 +1,5 @@
+
+"use client"
 import ResponsiveModal from "@/components/responsive-modal";
 import useEditTaskModal from "@/features/hooks/use-edit-task-modal";
 import EditTaskFormWrapper from "./edit-task-form-wrapper";
