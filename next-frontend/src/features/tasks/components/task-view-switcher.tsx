@@ -15,8 +15,12 @@ import { columns } from "./columns";
 import DataKanban from "./data-kanban";
 import { TaskStatus } from "../types";
 import { useBulkUpdateTasks } from "../api/use-bulk-update-tasks";
+import DataCalendar from "./data-calendar";
 
-const TaskViewSwitcher = () => {
+interface TaskViewSwitcherProps {
+  hideProjectFilter?: boolean;
+}
+const TaskViewSwitcher = ({hideProjectFilter}: TaskViewSwitcherProps) => {
   const { workspaceId } = useParams<{ workspaceId: string }>();
   const [{ status, assigneeId, projectId, dueDate }] = useTaskFilters();
   const { data: tasks, isPending: isTasksLaoding } = useGetTasks({
@@ -62,7 +66,7 @@ const TaskViewSwitcher = () => {
           </Button>
         </div>
         <DottedSeperator className="my-4" />
-        <DataFilters />
+        <DataFilters hideProjectFilter={hideProjectFilter} />
         <DottedSeperator className="my-4" />
         {isTasksLaoding ? (
           <div className="w-full border rounded-lg h-[200px] flex flex-col justify-center items-center">
@@ -79,7 +83,9 @@ const TaskViewSwitcher = () => {
                 data={tasks?.documents ?? []}
               />
             </TabsContent>
-            <TabsContent value="calendar">{JSON.stringify(tasks)}</TabsContent>
+            <TabsContent value="calendar">
+              <DataCalendar data={tasks?.documents ?? []}/>
+            </TabsContent>
           </>
         )}
       </div>

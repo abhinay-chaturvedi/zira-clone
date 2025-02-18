@@ -15,8 +15,10 @@ import React from "react";
 import { TaskStatus } from "../types";
 import useTaskFilters from "@/features/hooks/use-task-filters";
 import DatePicker from "@/components/date-picker";
-
-const DataFilters = () => {
+interface DataFiltersProps {
+  hideProjectFilter?: boolean;
+}
+const DataFilters = ({hideProjectFilter}: DataFiltersProps) => {
   const { workspaceId } = useParams<{ workspaceId: string }>();
   const { data: projects, isPending: isProjectsLoading } = useGetProjects({
     workspaceId,
@@ -103,7 +105,7 @@ const DataFilters = () => {
           })}
         </SelectContent>
       </Select>
-      <Select
+      {!hideProjectFilter && <Select
         defaultValue={projectId ?? undefined}
         onValueChange={onProjectChange}
       >
@@ -124,7 +126,7 @@ const DataFilters = () => {
             );
           })}
         </SelectContent>
-      </Select>
+      </Select>}
       <DatePicker
         placeHolder="Due Date"
         className="h-8 w-full lg:w-auto"
