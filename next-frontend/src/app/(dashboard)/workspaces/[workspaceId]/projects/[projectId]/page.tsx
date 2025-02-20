@@ -6,6 +6,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
 import TaskViewSwitcher from "../../../../../../features/tasks/components/task-view-switcher";
+import ProjectAnalytics from "@/features/projects/components/project-analytics";
 
 interface ProjectIdPageProps {
   params: {
@@ -41,6 +42,7 @@ const ProjectIdPage = async ({ params }: ProjectIdPageProps) => {
           </Button>
         </div>
       </div>
+      <ProjectAnalytics/>
       <TaskViewSwitcher hideProjectFilter/>
     </div>
   );

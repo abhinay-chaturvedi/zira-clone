@@ -24,7 +24,6 @@ export const useConfirm = (
   };
   const handleClose = () => {
     setPromise(null);
-    document.body.style.pointerEvents = "auto";
   };
   const handleConfirm = () => {
     promise?.resolve(true);

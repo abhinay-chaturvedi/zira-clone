@@ -3,17 +3,41 @@ import React from "react";
 import { Task } from "../types";
 import ProjectAvatar from "@/features/projects/components/project-avatar";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { ChevronRightIcon, TrashIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useDeleteTask } from "../api/use-delete-task";
+import { useConfirm } from "@/hooks/use-confirm";
 interface TaskBreadcrumbsProps {
   project: any;
   task: Task;
 }
 const TaskBreadcrumbs = ({ project, task }: TaskBreadcrumbsProps) => {
   const { workspaceId } = useParams<{ workspaceId: string }>();
+  const router = useRouter();
+  const { mutate, isPending } = useDeleteTask();
+  const [ConfirmDialog, confirm] = useConfirm(
+    "Delete Task",
+    "This action can not be undone.",
+    "destructive"
+  );
+  const handleDeleteTask = async () => {
+    const ok = await confirm();
+    if (!ok) {
+      return;
+    }
+    mutate(
+      { taskId: task.$id },
+      {
+        onSuccess: () => {
+          router.push(`/workspaces/${workspaceId}/tasks`);
+        },
+      }
+    );
+  };
   return (
     <div className="flex items-center gap-x-2">
+      <ConfirmDialog/>
       <ProjectAvatar
         name={project.name}
         image={project.imageUrl}
@@ -26,7 +50,13 @@ const TaskBreadcrumbs = ({ project, task }: TaskBreadcrumbsProps) => {
       </Link>
       <ChevronRightIcon className="size-4 lg:size-5 text-muted-foreground" />
       <p className="text-sm lg:text-lg font-semibold">{task.name}</p>
-      <Button className="ml-auto" variant={"destructive"} size={"sm"}>
+      <Button
+        onClick={handleDeleteTask}
+        disabled={isPending}
+        className="ml-auto"
+        variant={"destructive"}
+        size={"sm"}
+      >
         <TrashIcon className="size-4 lg:mr-2" />
         <span className="hidden lg:block">Delete Task</span>
       </Button>

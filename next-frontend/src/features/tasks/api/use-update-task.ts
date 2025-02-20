@@ -5,10 +5,14 @@ import { NEXT_PUBLIC_API_URL } from "@/config";
 type t = createTaskPayload & {
   taskId: string;
 };
+type tn = t | {
+  taskId: string;
+  description?: string
+}
 export const useUpdateTask = () => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: async (payload: t) => {
+    mutationFn: async (payload: tn) => {
       console.log("-----------", payload);
       const response = await fetch(
         NEXT_PUBLIC_API_URL + "/tasks/" + payload.taskId,

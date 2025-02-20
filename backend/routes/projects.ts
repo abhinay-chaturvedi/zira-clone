@@ -4,6 +4,7 @@ import {
   getProjectsInWorkspace,
   handleCreateProject,
   handleDeleteProject,
+  handleProjectAnalytics,
   handleUpdateProject,
 } from "../controllers/projects";
 import multer from "multer";
@@ -24,4 +25,5 @@ router.patch(
   handleUpdateProject
 );
 router.delete("/:projectId", sessionMiddleware, handleDeleteProject)
+router.get("/:projectId/analytics", sessionMiddleware, handleProjectAnalytics);
 export const projectsRouter = router;
