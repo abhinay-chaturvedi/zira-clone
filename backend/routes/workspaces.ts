@@ -7,6 +7,7 @@ import {
   deleteWorkspace,
   getWorkSpaces,
   handleJoinWorkspace,
+  handleWorkspaceAnalytics,
   resetInviteCode,
   updateWorkspace,
 } from "../controllers/workspaces";
@@ -49,4 +50,5 @@ router.post(
   validate(z.object({ code: z.string() })),
   handleJoinWorkspace
 );
+router.get("/:workspaceId/analytics", sessionMiddleware, handleWorkspaceAnalytics);
 export const workspacesRoute = router;
