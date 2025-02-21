@@ -18,6 +18,7 @@ const app: Application = express();
 app.use(express.json());
 
 // app.use(express.urlencoded({extended: false}))
+console.log(config.APP_URL)
 app.use(cookieParser());
 app.use(
   cors({

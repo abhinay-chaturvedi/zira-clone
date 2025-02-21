@@ -4,7 +4,7 @@ dotenv.config()
 export const config = {
     PORT: process.env.PORT || 5000,
     AUTH_COOKIE: "chaturvedi-zira-clone-session",
-    APP_URL: "http://localhost:3000",
+    APP_URL: process.env.APP_URL,
     APPWRITE_DATABASE_ID: process.env.APPWRITE_DATABASE_ID!,
     APPWRITE_WORKSPACES_ID: process.env.APPWRITE_WORKSPACES_ID!,
     APPWRITE_MEMBERS_ID: process.env.APPWRITE_MEMBERS_ID!,
