@@ -23,7 +23,7 @@ export const loginController = async (
     });
     return res
       .status(200)
-      .json({ message: "successfully login!", success: true });
+      .json({ message: "successfully login!", success: true, secret: session.secret });
   } catch (e: any) {
     return res.status(500).json({ success: false, message: e.message });
   }
@@ -42,12 +42,12 @@ export const registerController = async (
       path: "/",
       httpOnly: true,
       secure: true,
-      sameSite: "strict",
+      sameSite: "none",
       maxAge: 60 * 60 * 24 * 30,
     });
     return res
       .status(200)
-      .json({ success: true, message: "successfully registered!" });
+      .json({ success: true, message: "successfully registered!", secret: session.secret });
   } catch (e: any) {
     return res.status(500).json({ success: false, message: e.message });
   }
