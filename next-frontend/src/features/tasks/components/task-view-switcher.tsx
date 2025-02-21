@@ -21,13 +21,13 @@ interface TaskViewSwitcherProps {
   hideProjectFilter?: boolean;
 }
 const TaskViewSwitcher = ({hideProjectFilter}: TaskViewSwitcherProps) => {
-  const { workspaceId } = useParams<{ workspaceId: string }>();
+  const { workspaceId, projectId: paramProjectId } = useParams<{ workspaceId: string, projectId: string }>();
   const [{ status, assigneeId, projectId, dueDate }] = useTaskFilters();
   const { data: tasks, isPending: isTasksLaoding } = useGetTasks({
     workspaceId,
     status,
     assigneeId,
-    projectId,
+    projectId: paramProjectId || projectId,
     dueDate,
   });
   const { open } = useCreateTaskModal();
