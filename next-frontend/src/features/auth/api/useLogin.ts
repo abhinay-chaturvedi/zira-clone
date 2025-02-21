@@ -17,8 +17,8 @@ export const useLogin = () => {
       });
       if(!response.ok) throw new Error("Failed to login")
       const result = await response.json();
-      console.log(result);
-      const res = await fetch("/api/auth/add-cookie", {
+      // console.log(result);
+      const res = await fetch("/api/auth/cookie", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

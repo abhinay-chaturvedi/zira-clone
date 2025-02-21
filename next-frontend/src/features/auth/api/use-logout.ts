@@ -16,19 +16,29 @@ export const useLogout = () => {
           credentials: "include",
         }
       );
-      if(!response.ok) throw new Error("Failed to logout")
+      if (!response.ok) throw new Error("Failed to logout");
+      const res = await fetch("/api/auth/cookie", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!res.ok) {
+        console.log("Error while deleting cookies");
+        throw new Error("Failed to logout.");
+      }
       const result = await response.json();
       // console.log(result);
       return result;
     },
     onSuccess: () => {
-      toast.success("Logged out")
+      toast.success("Logged out");
       router.refresh();
       queryClient.invalidateQueries({ queryKey: ["current"] });
     },
     onError: () => {
-      toast.error("Failed to logout")
-    }
+      toast.error("Failed to logout");
+    },
   });
   return mutation;
 };

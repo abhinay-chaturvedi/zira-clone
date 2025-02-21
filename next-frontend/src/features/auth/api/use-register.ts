@@ -20,6 +20,17 @@ export const useRegister = () => {
       if(!response.ok) throw new Error("Failed to register")
       const result = await response.json();
       // console.log(result);
+      const res = await fetch("/api/auth/cookie", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({secret: result.secret })
+      })
+      if(!res.ok) {
+        console.log("Error while adding cookies");
+        router.push("/sign-in");
+      }
       return result;
     },
     onSuccess: () => {

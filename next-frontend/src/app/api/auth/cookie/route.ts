@@ -17,3 +17,7 @@ export const POST = async (req: NextRequest) => {
   console.log(json);
   return NextResponse.json(json, { status: 200 });
 };
+export const DELETE = async () => {
+  await cookies().delete(AUTH_COOKIE);
+  return NextResponse.json({ message: "deleted cookie" }, { status: 200 });
+};
